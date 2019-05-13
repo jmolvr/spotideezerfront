@@ -12,7 +12,7 @@ export default class Main extends Component{
     //chamada quando o link é enviado
     handleSubmit = async event => {
         event.preventDefault();
-        const deezerRegex = /^https|http:\/\/www.deezer.com\/track\/\d+/;
+        const deezerRegex = /^(https|http):\/\/www.deezer.com\/track\/\d+/;
         const spotifyRegex = /^https:\/\/open\.spotify\.com\/track\/\w+/;
 
         if(spotifyRegex.test(this.state.link)){
