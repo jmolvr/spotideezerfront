@@ -1,59 +1,59 @@
-import React, {Component} from 'react';
-import Clipboard from 'clipboard';
+import React, {useState} from 'react';
 import api from "../../services/api";
 import './styles.css';
-export default class Main extends Component{
-    state = {
-        link:"",
-    }
-    componentDidMount(){
-        this.clipboard = new Clipboard("#converted");
-    }
+export default function Main(props){
+    const [url, setUrl] = useState('');
+
     //chamada quando o link é enviado
-    handleSubmit = async event => {
+    async function handleSubmit(event){
         event.preventDefault();
+        props.setLoading(1);
         const deezerRegex = /^(https|http):\/\/www.deezer.com\/track\/\d+/;
         const spotifyRegex = /^https:\/\/open\.spotify\.com\/track\/\w+/;
 
-        if(spotifyRegex.test(this.state.link)){
-                let link = this.state.link.match(spotifyRegex)[0];
-                const response = await api.post('/getURLDeezer', {
+        if(spotifyRegex.test(url)){
+            let link = url.match(spotifyRegex)[0];
+            const response = await api.post('/getURLDeezer', {
                 url: link,
             });
-            const divElement = document.querySelector('#converted');
-            divElement.setAttribute('value', response.data);
-        } else if(deezerRegex.test(this.state.link)){
-                let link = this.state.link.match(deezerRegex)[0];
-                const response = await api.post('/getURLSpotify', {
+            props.handleCardInfo(response.data)
+            props.setLoading(0);
+        
+        }else if(deezerRegex.test(url)){
+            let link = url.match(deezerRegex)[0];
+            const response = await api.post('/getURLSpotify', {
                 url: link,
             });
-            const divElement = document.querySelector('#converted');
-            divElement.setAttribute('value', response.data);
+            props.handleCardInfo(response.data)
+            props.setLoading(0)
         }
         
     }
 
-    handleChange = event => {
+    function handleChange (event){
         const { value } = event.target;
-        this.setState({ link: value});
+        setUrl(value);
     }
 
-    render(){
-        return (
-            <div id="main-container">
-            <form onSubmit={this.handleSubmit}>
-                <input
-                    placeholder="Cole link aqui"
-                    value={this.state.link}
-                    onChange={this.handleChange}
-                />
-                <button type="submit">Converter</button>
-                <input
-                    id="converted"
-                    placeholder="Link Convertido"
-                />
+    return (
+        <div className="card" style={{width:"20rem"}}>
+            <div className="card-body">
+            <h5 className="card-title">Paste link here</h5>
+            <form  onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <div className="input-group input-group-lg">
+                        <input
+                            className="form-control"
+                            value={url}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <button type="submit" className="btn btn-success btn-lg btn-block">Converter</button>
+                </div>
             </form>
             </div>
-        )
-    }
+        </div>
+    )
 }
