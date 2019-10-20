@@ -16,18 +16,17 @@ export default function Main(props){
             const response = await api.post('/getURLDeezer', {
                 url: link,
             });
-            props.handleCardInfo(response.data)
-            props.setLoading(0);
-        
+            props.handleCardInfo(response.data);
+            setUrl("");
+            
         }else if(deezerRegex.test(url)){
             let link = url.match(deezerRegex)[0];
             const response = await api.post('/getURLSpotify', {
                 url: link,
             });
-            props.handleCardInfo(response.data)
-            props.setLoading(0)
-        }
-        
+            props.handleCardInfo(response.data);
+            setUrl("");
+        } 
     }
 
     function handleChange (event){
@@ -38,21 +37,22 @@ export default function Main(props){
     return (
         <div className="card" style={{width:"20rem"}}>
             <div className="card-body">
-            <h5 className="card-title">Paste link here</h5>
-            <form  onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <div className="input-group input-group-lg">
-                        <input
-                            className="form-control"
-                            value={url}
-                            onChange={handleChange}
-                        />
+                <h5 className="card-title">Paste link here</h5>
+                <form  onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <div className="input-group input-group-lg">
+                            <input
+                                className="form-control"
+                                type="url"
+                                value={url}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="form-group">
-                    <button type="submit" className="btn btn-success btn-lg btn-block">Converter</button>
-                </div>
-            </form>
+                    <div className="form-group">
+                        <button type="submit" className="btn btn-success btn-lg btn-block">Converter</button>
+                    </div>
+                </form>
             </div>
         </div>
     )
