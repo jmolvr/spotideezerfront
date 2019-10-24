@@ -46,6 +46,7 @@ export default function Main(props){
                                 type="url"
                                 value={url}
                                 onChange={handleChange}
+                                required
                             />
                         </div>
                     </div>
