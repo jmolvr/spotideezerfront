@@ -1,32 +1,20 @@
 import React, {useState} from 'react';
-import api from "../../services/api";
 import './styles.css';
+import {deezerRegex, spotifyRegex, deezerEntry, spotifyEntry } from '../../services/apiTemplate';
+import { useDispatch } from 'react-redux';
+
 export default function Main(props){
     const [url, setUrl] = useState('');
-
     //chamada quando o link é enviado
     async function handleSubmit(event){
         event.preventDefault();
         props.setLoading(1);
-        const deezerRegex = /^(https|http):\/\/www.deezer.com\/track\/\d+/;
-        const spotifyRegex = /^https:\/\/open\.spotify\.com\/track\/\w+/;
-
         if(spotifyRegex.test(url)){
-            let link = url.match(spotifyRegex)[0];
-            const response = await api.post('/getURLDeezer', {
-                url: link,
-            });
-            props.handleCardInfo(response.data);
-            setUrl("");
-            
+            props.handleCardInfo(await spotifyEntry(url));            
         }else if(deezerRegex.test(url)){
-            let link = url.match(deezerRegex)[0];
-            const response = await api.post('/getURLSpotify', {
-                url: link,
-            });
-            props.handleCardInfo(response.data);
-            setUrl("");
+            props.handleCardInfo(await deezerEntry(url)); 
         } 
+        setUrl("");
     }
 
     function handleChange (event){
@@ -57,4 +45,4 @@ export default function Main(props){
             </div>
         </div>
     )
-}
+}   

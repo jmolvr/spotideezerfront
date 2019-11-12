@@ -18,7 +18,6 @@ function App() {
   
   function handleCardInfo(data){
     if(data !== ""){
-      console.log("Há dados");
       setData(data);
       const img = new Image();
       img.src = data.cover
