@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import './styles.css';
 import {deezerRegex, spotifyRegex, deezerEntry, spotifyEntry } from '../../services/apiTemplate';
-import { useDispatch } from 'react-redux';
 
 export default function Main(props){
     const [url, setUrl] = useState('');
